@@ -1,19 +1,36 @@
-# NeuroAssess — Alzheimer's Risk Screening Web App
+# Alzheimer's Risk Screening Web App
 
-An AI-assisted clinical screening tool that predicts a patient's risk of Alzheimer's disease using a trained XGBoost model. A clinician fills in patient data through a form-based frontend, which sends the data to a FastAPI backend that runs the prediction and returns the result.
-
----
+## Machine Learning Model (FinalModel)
+Overall Best Model: XGBoost
+Includes:
+-Exploratory Data Analysis
+-Preprocessing & Preparation
+-Model Creation
+-Model Evaluation
 
 ## Project Structure
 
 ```
+AlzheimerModel/
+|   ├── alzheimers_ml_model.ipynb   #combined all experimented models, Compare & Contrast 
+|   ├── RF_Model.ipynb              #Random Forest Model
+|   ├── XGB_Model.ipynb             #XGBoost Model                 
+|   └── GB_Model.ipynb              #Gradient Boosted Model
+datasets/
+│   └── alzheimers_disease_diagnosis.csv   #dataset
+FinalModel/
+│   └── Alzheimer_XGB.ipynb                 #best model
 web-app/
 ├── server/
 │   ├── app.py                  # FastAPI backend
 │   └── xgb_alzheimer.json      # Trained XGBoost model
 ├── client/
+│   └── css/
+│       └── styles.css          # styling
+│   └── js/
+│       └── script.js           # Frontend logic
 │   └── pages/
-│       └── index.html          # Frontend assessment form
+│       └── index.html          # Frontend UI
 └── README.md
 ```
 
@@ -31,7 +48,7 @@ web-app/
 Open a terminal, navigate to the project root, and install all required packages:
 
 ```powershell
-python -m pip install fastapi uvicorn xgboost numpy
+python3 -m pip install fastapi uvicorn xgboost numpy
 ```
 
 ---
@@ -43,7 +60,7 @@ You need two terminals open at the same time — one for the backend API, one fo
 **Terminal 1 — Start the FastAPI backend**
 
 ```powershell
-cd server
+cd web-app/server
 python3 -m uvicorn app:app --reload
 ```
 
@@ -56,7 +73,7 @@ The API will be available at `http://127.0.0.1:8000`. You can verify it is runni
 **Terminal 2 — Serve the frontend**
 
 ```powershell
-cd client
+cd web-app/client
 python3 -m http.server 8080
 ```
 
@@ -166,14 +183,15 @@ Use `python -m pip install ...` instead. See Step 2 of the setup above.
 **`uvicorn` is not recognised in PowerShell**
 Use `python -m uvicorn app:app --reload` instead.
 
-**Frontend shows "Cannot reach the server"**
-Make sure Terminal 1 is running and shows `Uvicorn running on http://127.0.0.1:8000`. Also confirm you are serving the frontend with `python -m http.server` and not opening the HTML file directly.
+**`pip` or `python` is not recognized**
+Try `python3` instead of `python`
 
-**Prediction always returns the same value**
-Ensure the feature order in `FEATURE_ORDER` inside `app.py` matches the column order the model was trained on exactly.
-
----
-
-## Disclaimer
-
-This tool is intended for clinical decision support only. It does not constitute a medical diagnosis. All predictions should be reviewed by a qualified neurologist before any clinical action is taken.
+## References
+@misc{rabie_el_kharoua_2024,
+title={Alzheimer's Disease Dataset},
+url={https://www.kaggle.com/dsv/8668279},
+DOI={10.34740/KAGGLE/DSV/8668279},
+publisher={Kaggle},
+author={Rabie El Kharoua},
+year={2024}
+}
