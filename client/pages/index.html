@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alzheimer's Prediction Engine</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Lora:wght@500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/styles.css"/>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C9.2 2 7 4.2 7 7c0 1.4.5 2.6 1.4 3.6C6.6 11.5 5 13.6 5 16c0 3.3 2.7 6 6 6h2c3.3 0 6-2.7 6-6 0-2.4-1.6-4.5-3.4-5.4C16.5 9.6 17 8.4 17 7c0-2.8-2.2-5-5-5zm0 2c1.7 0 3 1.3 3 3s-1.3 3-3 3-3-1.3-3-3 1.3-3 3-3zm1 9h-2c-2.2 0-4 1.8-4 4s1.8 4 4 4h2c2.2 0 4-1.8 4-4s-1.8-4-4-4z"/></svg>
+    </div>
+    <div>
+      <div class="header-title">Alzheimer's Prediction Engine</div>
+      <div class="header-subtitle">Alzheimer's Risk Screening Tool</div>
+    </div>
+  </div>
+  <div class="header-badge">Powered by XGBoost</div>
+</header>
+
+<div class="page">
+  <div class="page-intro">
+    <h1>Patient Risk Assessment</h1>
+    <div class="divider"></div>
+    <p>Complete all sections below to generate an AI-assisted Alzheimer's risk prediction. All fields are used by the model — ensure values are accurate and up-to-date.</p>
+  </div>
+
+  <div class="progress-bar" id="progressBar">
+    <div class="progress-seg" data-sec="0"></div>
+    <div class="progress-seg" data-sec="1"></div>
+    <div class="progress-seg" data-sec="2"></div>
+    <div class="progress-seg" data-sec="3"></div>
+    <div class="progress-seg" data-sec="4"></div>
+    <div class="progress-seg" data-sec="5"></div>
+  </div>
+
+  <form id="assessmentForm" novalidate>
+
+    <!-- 1. Patient Information -->
+    <div class="card" data-section="0">
+      <div class="card-header">
+        <div class="card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+        <div class="card-title">Patient Information</div>
+        <div class="card-num">01 / 06</div>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Age <span class="req">*</span></label>
+          <input type="number" name="Age" min="40" max="110" placeholder="e.g. 73" required/>
+          <span class="hint">Range: 40 – 110 years</span>
+        </div>
+        <div class="field">
+          <label>Gender <span class="req">*</span></label>
+          <div class="toggle-group">
+            <input type="radio" name="Gender" id="gender_m" value="0" required/>
+            <label for="gender_m">Male</label>
+            <input type="radio" name="Gender" id="gender_f" value="1"/>
+            <label for="gender_f">Female</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Ethnicity <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select name="Ethnicity" required>
+              <option value="" disabled selected>Select ethnicity</option>
+              <option value="0">Caucasian</option>
+              <option value="1">African American</option>
+              <option value="2">Asian</option>
+              <option value="3">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Education Level <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select name="EducationLevel" required>
+              <option value="" disabled selected>Select level</option>
+              <option value="0">None</option>
+              <option value="1">High School</option>
+              <option value="2">Bachelor's</option>
+              <option value="3">Higher</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Lifestyle Factors -->
+    <div class="card" data-section="1">
+      <div class="card-header">
+        <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="card-title">Lifestyle Factors</div>
+        <div class="card-num">02 / 06</div>
+      </div>
+      <div class="grid-3">
+        <div class="field">
+          <label>BMI <span class="req">*</span></label>
+          <input type="number" name="BMI" step="0.1" min="10" max="60" placeholder="e.g. 24.5" required/>
+          <span class="hint">kg/m²</span>
+        </div>
+        <div class="field">
+          <label>Alcohol Consumption <span class="req">*</span></label>
+          <input type="number" name="AlcoholConsumption" step="0.1" min="0" max="30" placeholder="e.g. 8.4" required/>
+          <span class="hint">Units/week (0 – 20)</span>
+        </div>
+        <div class="field">
+          <label>Physical Activity <span class="req">*</span></label>
+          <input type="number" name="PhysicalActivity" step="0.1" min="0" max="15" placeholder="e.g. 6.3" required/>
+          <span class="hint">Hours/week (0 – 10)</span>
+        </div>
+        <div class="field">
+          <label>Diet Quality <span class="req">*</span></label>
+          <input type="number" name="DietQuality" step="0.1" min="0" max="10" placeholder="e.g. 5.2" required/>
+          <span class="hint">Score 0 – 10</span>
+        </div>
+        <div class="field">
+          <label>Sleep Quality <span class="req">*</span></label>
+          <input type="number" name="SleepQuality" step="0.1" min="4" max="10" placeholder="e.g. 7.8" required/>
+          <span class="hint">Score 4 – 10</span>
+        </div>
+        <div class="field">
+          <label>Smoking <span class="req">*</span></label>
+          <div class="toggle-group">
+            <input type="radio" name="Smoking" id="smoke_n" value="0" required/>
+            <label for="smoke_n">No</label>
+            <input type="radio" name="Smoking" id="smoke_y" value="1"/>
+            <label for="smoke_y">Yes</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Medical History -->
+    <div class="card" data-section="2">
+      <div class="card-header">
+        <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg></div>
+        <div class="card-title">Medical History</div>
+        <div class="card-num">03 / 06</div>
+      </div>
+      <div class="grid-3">
+        <div class="field">
+          <label>Family History of Alzheimer's <span class="req">*</span></label>
+          <div class="toggle-group">
+            <input type="radio" name="FamilyHistoryAlzheimers" id="fam_n" value="0" required/>
+            <label for="fam_n">No</label>
+            <input type="radio" name="FamilyHistoryAlzheimers" id="fam_y" value="1"/>
+            <label for="fam_y">Yes</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Cardiovascular Disease <span class="req">*</span></label>
+          <div class="toggle-group">
+            <input type="radio" name="CardiovascularDisease" id="cvd_n" value="0" required/>
+            <label for="cvd_n">No</label>
+            <input type="radio" name="CardiovascularDisease" id="cvd_y" value="1"/>
+            <label for="cvd_y">Yes</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Diabetes <span class="req">*</span></label>
+          <div class="toggle-group">
+            <input type="radio" name="Diabetes" id="diab_n" value="0" required/>
+            <label for="diab_n">No</label>
+            <input type="radio" name="Diabetes" id="diab_y" value="1"/>
+            <label for="diab_y">Yes</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Depression <span class="req">*</span></label>
+          <div class="toggle-group">
+            <input type="radio" name="Depression" id="dep_n" value="0" required/>
+            <label for="dep_n">No</label>
+            <input type="radio" name="Depression" id="dep_y" value="1"/>
+            <label for="dep_y">Yes</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Head Injury <span class="req">*</span></label>
+          <div class="toggle-group">
+            <input type="radio" name="HeadInjury" id="hi_n" value="0" required/>
+            <label for="hi_n">No</label>
+            <input type="radio" name="HeadInjury" id="hi_y" value="1"/>
+            <label for="hi_y">Yes</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Hypertension <span class="req">*</span></label>
+          <div class="toggle-group">
+            <input type="radio" name="Hypertension" id="htn_n" value="0" required/>
+            <label for="htn_n">No</label>
+            <input type="radio" name="Hypertension" id="htn_y" value="1"/>
+            <label for="htn_y">Yes</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Vitals & Labs -->
+    <div class="card" data-section="3">
+      <div class="card-header">
+        <div class="card-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="card-title">Vitals &amp; Laboratory Results</div>
+        <div class="card-num">04 / 06</div>
+      </div>
+      <div class="grid-3">
+        <div class="field">
+          <label>Systolic BP <span class="req">*</span></label>
+          <input type="number" name="SystolicBP" min="90" max="200" placeholder="e.g. 130" required/>
+          <span class="hint">mmHg (90 – 180)</span>
+        </div>
+        <div class="field">
+          <label>Diastolic BP <span class="req">*</span></label>
+          <input type="number" name="DiastolicBP" min="60" max="130" placeholder="e.g. 82" required/>
+          <span class="hint">mmHg (60 – 120)</span>
+        </div>
+        <div class="field">
+          <label>Total Cholesterol <span class="req">*</span></label>
+          <input type="number" name="CholesterolTotal" step="0.1" min="100" max="400" placeholder="e.g. 220" required/>
+          <span class="hint">mg/dL (150 – 300)</span>
+        </div>
+        <div class="field">
+          <label>LDL Cholesterol <span class="req">*</span></label>
+          <input type="number" name="CholesterolLDL" step="0.1" min="50" max="250" placeholder="e.g. 130" required/>
+          <span class="hint">mg/dL (50 – 200)</span>
+        </div>
+        <div class="field">
+          <label>HDL Cholesterol <span class="req">*</span></label>
+          <input type="number" name="CholesterolHDL" step="0.1" min="20" max="100" placeholder="e.g. 55" required/>
+          <span class="hint">mg/dL (20 – 100)</span>
+        </div>
+        <div class="field">
+          <label>Triglycerides <span class="req">*</span></label>
+          <input type="number" name="CholesterolTriglycerides" step="0.1" min="50" max="400" placeholder="e.g. 180" required/>
+          <span class="hint">mg/dL (50 – 400)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Cognitive Assessment -->
+    <div class="card" data-section="4">
+      <div class="card-header">
+        <div class="card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div class="card-title">Cognitive &amp; Functional Assessment</div>
+        <div class="card-num">05 / 06</div>
+      </div>
+      <div class="grid-3">
+        <div class="field">
+          <label>MMSE Score <span class="req">*</span></label>
+          <input type="number" name="MMSE" step="0.1" min="0" max="30" placeholder="e.g. 24.5" required/>
+          <span class="hint">Mini-Mental State Exam (0 – 30)</span>
+        </div>
+        <div class="field">
+          <label>Functional Assessment <span class="req">*</span></label>
+          <input type="number" name="FunctionalAssessment" step="0.01" min="0" max="10" placeholder="e.g. 6.5" required/>
+          <span class="hint">Score 0 – 10</span>
+        </div>
+        <div class="field">
+          <label>ADL Score <span class="req">*</span></label>
+          <input type="number" name="ADL" step="0.01" min="0" max="10" placeholder="e.g. 5.8" required/>
+          <span class="hint">Activities of Daily Living (0 – 10)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Symptoms -->
+    <div class="card" data-section="5">
+      <div class="card-header">
+        <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <div class="card-title">Reported Symptoms</div>
+        <div class="card-num">06 / 06</div>
+      </div>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:16px;">Select all symptoms currently reported by or observed in the patient.</p>
+      <div class="symptom-grid">
+        <label class="symptom-check">
+          <input type="checkbox" name="MemoryComplaints" value="1"/>
+          <div class="check-box"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9.5 10.5,2.5"/></svg></div>
+          <span>Memory Complaints</span>
+        </label>
+        <label class="symptom-check">
+          <input type="checkbox" name="BehavioralProblems" value="1"/>
+          <div class="check-box"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9.5 10.5,2.5"/></svg></div>
+          <span>Behavioral Problems</span>
+        </label>
+        <label class="symptom-check">
+          <input type="checkbox" name="Confusion" value="1"/>
+          <div class="check-box"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9.5 10.5,2.5"/></svg></div>
+          <span>Confusion</span>
+        </label>
+        <label class="symptom-check">
+          <input type="checkbox" name="Disorientation" value="1"/>
+          <div class="check-box"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9.5 10.5,2.5"/></svg></div>
+          <span>Disorientation</span>
+        </label>
+        <label class="symptom-check">
+          <input type="checkbox" name="PersonalityChanges" value="1"/>
+          <div class="check-box"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9.5 10.5,2.5"/></svg></div>
+          <span>Personality Changes</span>
+        </label>
+        <label class="symptom-check">
+          <input type="checkbox" name="DifficultyCompletingTasks" value="1"/>
+          <div class="check-box"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9.5 10.5,2.5"/></svg></div>
+          <span>Difficulty Completing Tasks</span>
+        </label>
+        <label class="symptom-check">
+          <input type="checkbox" name="Forgetfulness" value="1"/>
+          <div class="check-box"><svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9.5 10.5,2.5"/></svg></div>
+          <span>Forgetfulness</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="submit-row">
+      <button type="button" class="btn-reset" id="resetBtn">Clear Form</button>
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Run Assessment
+      </button>
+    </div>
+
+    <!-- Error Banner -->
+    <div id="error-banner" style="display:none;">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="error-text">Could not reach the prediction server.</span>
+    </div>
+
+    <!-- Result Card -->
+    <div id="result-card">
+      <div class="result-header">
+        <div class="result-icon" id="resultIcon"></div>
+        <div>
+          <div class="result-label" id="resultLabel"></div>
+          <div class="result-desc"  id="resultDesc"></div>
+        </div>
+      </div>
+      <div class="result-factors" id="resultFactors"></div>
+      <div class="result-note">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        This output is ML-assisted and intended for clinical decision support only. It does not constitute a medical diagnosis. Please consult a qualified neurologist for formal evaluation.
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script src="../js/script.js"></script>
+
+</body>
+</html>
