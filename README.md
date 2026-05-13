@@ -1,29 +1,29 @@
 # Alzheimer's Risk Screening Web App
 
-## Machine Learning Model (FinalModel)
-Overall Best Model: XGBoost
+## Machine Learning Model Pipeline
+Overall Best Model: GradientBoost/XGBoost
 Includes:
--Exploratory Data Analysis
--Preprocessing & Preparation
--Model Creation
--Model Evaluation
+- Exploratory Data Analysis (EDA)
+- Data Preparation
+- Model Creation (RandomForest, GradientBoost, XGBoost)
+- Model Evaluation
+- Cross Validation
+- Download/Deploy Model
 
 ## Project Structure
 
 ```
 AlzheimerModel/
-|   ├── alzheimers_ml_model.ipynb   #combined all experimented models, Compare & Contrast 
-|   ├── RF_Model.ipynb              #Random Forest Model
-|   ├── XGB_Model.ipynb             #XGBoost Model                 
-|   └── GB_Model.ipynb              #Gradient Boosted Model
+|   ├── alzheimers_ml_model.ipynb   #Model Pipeline (RF, GB, XGB)
+|   ├── gb_alzheimers_model.joblib  #Trained gradientboost model
+|   ├── rf_alzheimers_model.joblib  #Trained randomforest model                
+|   └── xgb_alzheimers_model.json   #Trained xgboost model
 datasets/
 │   └── alzheimers_disease_diagnosis.csv   #dataset
-FinalModel/
-│   └── Alzheimer_XGB.ipynb                 #best model
 web-app/
 ├── server/
-│   ├── app.py                  # FastAPI backend
-│   └── xgb_alzheimer.json      # Trained XGBoost model
+│   ├── app.py                         # FastAPI backend
+│   └── gb_alzheimers_model.joblib     # Trained GradientBoost model
 ├── client/
 │   └── css/
 │       └── styles.css          # styling
