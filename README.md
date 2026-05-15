@@ -50,12 +50,19 @@ Open a terminal, navigate to the project root, and install all required packages
 ```powershell
 python3 -m pip install fastapi uvicorn xgboost numpy
 ```
-
+A quick note, you might also need to virtualize a Python environment instead to get this project up and running (for MacOS):
+```powershell
+python3 -m venv venv
+source venv/bin/activate
+pip install joblib
+pip install pandas
+pip install scikit-learn
+```
 ---
 
 ## Running the App
 
-You need two terminals open at the same time — one for the backend API, one for the frontend.
+You need two terminals open at the same time — one for the backend API, one for the frontend. Additionally, make sure to have both terminals in venv mode (for MacOS)
 
 **Terminal 1 — Start the FastAPI backend**
 
